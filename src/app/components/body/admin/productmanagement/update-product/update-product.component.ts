@@ -10,7 +10,6 @@ import {FormatService} from '../../../../../services/product/format.service';
 import {Observable} from 'rxjs';
 import {AngularFireUploadTask} from '@angular/fire/storage';
 import {UploadTaskSnapshot} from '@angular/fire/storage/interfaces';
-import * as url from 'url';
 import {UploadImageService} from '../../../../../services/upload-image.service';
 import * as cloneDeep from 'lodash/cloneDeep';
 
@@ -34,7 +33,7 @@ export class UpdateProductComponent implements OnInit {
     productPrice: new FormControl(''),
     productQuantity: new FormControl(''),
     productDescription: new FormControl(''),
-    licenseImageUrl: new FormControl('') //
+    productImageUrl: new FormControl('') //
   });
 
   constructor(private productService: ProductsService,
@@ -117,7 +116,7 @@ export class UpdateProductComponent implements OnInit {
     return this.uploadImageService.getPercentage();
   }
 
-  getImageUrl(): url {
+  getImageUrl() {
     return this.uploadImageService.getImageUrl();
   }
 }

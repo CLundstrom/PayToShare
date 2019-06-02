@@ -10,7 +10,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AppRoutingModule} from './app-routing.module';
 import {FeaturesComponent} from './components/body/features/features.component';
 import {WeeklydealsComponent} from './components/body/weeklydeals/weeklydeals.component';
-import {PricingComponent} from './components/body/pricing/pricing.component';
 import {MypageComponent} from './components/body/mypage/mypage.component';
 import {RegisterComponent} from './components/body/register/register.component';
 import {PasswordrecoveryComponent} from './components/body/passwordrecovery/passwordrecovery.component';
@@ -55,7 +54,6 @@ import {SaleOverviewComponent} from './components/body/admin/salemanegement/sale
 import {DeleteSaleComponent} from './components/body/admin/salemanegement/delete-sale/delete-sale.component';
 import {PlanComponent} from './components/body/plan/plan.component';
 import {CartdropdownComponent} from './components/navbar/cartdropdown/cartdropdown.component';
-import {CollectionComponent} from './components/body/collection/collection.component';
 import {StarReviewComponent} from './components/body/products/star-review/star-review.component';
 import {CheckoutComponent} from './components/body/checkout/CartOverview/checkout.component';
 import {MypageOverviewComponent} from './components/body/mypage/mypage-overview/mypage-overview.component';
@@ -66,18 +64,19 @@ import {OrderConfirmedComponent} from './components/body/checkout/order-confirme
 import {LicensesComponent} from './components/body/licenses/licenses.component';
 import {FrontPageComponent} from './components/body/front-page/front-page.component';
 import {AddLicenseSaleComponent} from './components/body/admin/salemanegement/add-license-sale/add-license-sale.component';
-import {OrdersComponent} from './components/body/orders/orders.component';
 import {SearchbarComponent} from './components/navbar/searchbar/searchbar.component';
 import {SearchListComponent} from './components/body/search-list/search-list.component';
-import { MySubscriptionsComponent } from './components/body/mypage/my-subscriptions/my-subscriptions.component';
-import { CookieService } from 'ngx-cookie-service';
+import {MySubscriptionsComponent} from './components/body/mypage/my-subscriptions/my-subscriptions.component';
+import {CookieService} from 'ngx-cookie-service';
+import {GetkeyComponent} from './components/body/getkey/getkey.component';
+import {ViewIncludedProductsComponent} from './components/body/view-included-products/view-included-products.component';
+import {OrderDetailsComponent } from './components/body/mypage/orders/order-details/order-details.component';
 
 @NgModule({
   declarations: [
     NavbarComponent,
     AppComponent,
     RegisterComponent,
-    PricingComponent,
     FeaturesComponent,
     WeeklydealsComponent,
     MypageComponent,
@@ -115,7 +114,6 @@ import { CookieService } from 'ngx-cookie-service';
     DeleteSaleComponent,
     PlanComponent,
     CartdropdownComponent,
-    CollectionComponent,
     StarReviewComponent,
     CheckoutComponent,
     MypageOverviewComponent,
@@ -126,10 +124,12 @@ import { CookieService } from 'ngx-cookie-service';
     LicensesComponent,
     FrontPageComponent,
     AddLicenseSaleComponent,
-    OrdersComponent,
     SearchbarComponent,
     SearchListComponent,
     MySubscriptionsComponent,
+    GetkeyComponent,
+    ViewIncludedProductsComponent,
+    OrderDetailsComponent,
   ],
   imports: [
     BrowserModule,

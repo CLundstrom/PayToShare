@@ -9,8 +9,10 @@ import {Cart} from '../../../models/products/cart';
 import {UserSessionService} from '../../../services/user-session.service';
 import {firestore} from 'firebase/app';
 import Timestamp = firestore.Timestamp;
-import {CookieService} from 'ngx-cookie-service';
 import {User} from '../../../models/user';
+import {Rating} from '../../../models/rating';
+import {StarService} from '../../../services/product/star.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-sales',
@@ -23,27 +25,26 @@ export class SalesComponent implements OnInit {
   private planSale: Sale[];
   private cart: Cart;
   private user: User;
+  private userId: string;
+  private licId: any;
+  private ratings: Rating[];
 
   constructor(private planService: PlanService,
               private salesService: SalesService,
               private userSessionService: UserSessionService,
-              private cookieService: CookieService) {
-    this.cart = new Cart();
-    this.cookieService.set('cart', JSON.stringify(this.cart), 1, '/');
+              private starService: StarService,
+              private router: Router) {
   }
 
   ngOnInit() {
-    this.cart = new Cart();
+    this.starService.getRatings().subscribe(ratings => this.ratings = ratings);
     this.salesService.getSaleOnType(SaleType.LICENSE).subscribe(sales => this.licenseSale = sales);
     this.salesService.getSaleOnType(SaleType.PLAN).subscribe(sales => this.planSale = sales);
     this.userSessionService.getUserDoc().subscribe(user => {
       if (user) {
+        this.userId = user.id;
         this.user = user;
         this.cart = Cart.clone(user.cart);
-      } else {
-        const tempCart = JSON.parse(this.cookieService.get('cart')) as Cart;
-        this.cart = Cart.clone(tempCart);
-        console.log(this.cart);
       }
     });
   }
@@ -58,24 +59,32 @@ export class SalesComponent implements OnInit {
   }
 
   addLicense(license: License) {
-    this.cart.add(license);
-    this.cookieService.set('cart', JSON.stringify(this.cart));
-    if (this.user) {
+    if (!this.cart) {
+      this.router.navigate(['/register']);
+    } else {
+      this.cart.add(license);
       this.userSessionService.updateCart(this.cart);
+      const x = document.getElementById('myDiv');
+      x.style.display = 'block';
+      setTimeout(() => {
+        x.style.display = 'none';
+        console.log('tick');
+      }, 1000);
     }
-    const x = document.getElementById('myDiv');
-    x.style.display = 'block';
-    setTimeout(() => {
-      x.style.display = 'none';
-      console.log('tick');
-    }, 1000);
   }
 
   addPlan(plan: Plan) {
-    this.cart.addPlan(plan);
-    this.cookieService.set('cart', JSON.stringify(this.cart));
-    if (this.user) {
+    if (!this.cart) {
+      this.router.navigate(['/register']);
+    } else {
+      this.cart.addPlan(plan);
       this.userSessionService.updateCart(this.cart);
+      const x = document.getElementById('myDiv');
+      x.style.display = 'block';
+      setTimeout(() => {
+        x.style.display = 'none';
+        console.log('tick');
+      }, 1000);
     }
   }
 
@@ -86,4 +95,21 @@ export class SalesComponent implements OnInit {
     const hours = Math.floor(secondsLeft / 3600);
     return days + ' days ' + hours + ' hours left!';
   }
+
+  consLog(licenseId) {
+    this.licId = licenseId;
+  }
+
+  get licenseId() {
+    return this.licId;
+  }
+
+  getObjectRating(objectID: string): number {
+    if (this.ratings) {
+      const objectRatings = this.ratings.filter(res => res.objectID === objectID);
+      const numberArray = objectRatings.map(r => r.value);
+      return numberArray.length ? numberArray.reduce((total, val) => total + val) / numberArray.length : 0;
+    }
+  }
 }
+

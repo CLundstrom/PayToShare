@@ -4,6 +4,7 @@ import {Cart} from 'src/app/models/products/cart';
 import {ProcessorderService} from '../../../../services/mail/processorder.service';
 import {User} from '../../../../models/user';
 import {License} from '../../../../models/products/license';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -15,13 +16,17 @@ export class CheckoutComponent implements OnInit {
   private cart: Cart = new Cart();
   private user: User;
 
-  constructor(private orderService: ProcessorderService, private session: UserSessionService) {
+  constructor(private orderService: ProcessorderService,
+              private session: UserSessionService,
+              private router: Router) {
   }
 
   ngOnInit() {
     this.session.getUserDoc().subscribe(user => {
-      this.user = user;
-      this.cart = Cart.clone(user.cart);
+      if (user) {
+        this.user = user;
+        this.cart = Cart.clone(user.cart);
+      }
     });
 
   }
@@ -48,8 +53,10 @@ export class CheckoutComponent implements OnInit {
     this.session.updateCart(this.cart);
   }
 
-  process() {
-    this.orderService.processOrder(this.user, this.cart);
+  async process() {
+    if (await this.orderService.processOrder(this.user, this.cart)) {
+      this.router.navigate(['/order-confirmed']);
+    }
   }
 
   removePlan() {
